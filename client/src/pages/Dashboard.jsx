@@ -14,6 +14,7 @@ function Dashboard() {
       const res = await API.get("/boards", {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+      // console.log("Boards fetched:", res.data);
       setBoards(res.data);
     } catch (err) {
       alert("Error fetching boards");
@@ -58,18 +59,22 @@ function Dashboard() {
       </form>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {boards.map((board) => (
-          <div
-            key={board._id}
-            className="bg-white p-4 rounded-xl shadow cursor-pointer hover:bg-blue-50"
-            onClick={() => navigate(`/board/${board._id}`)}
-          >
-            <h2 className="text-lg font-semibold">{board.title}</h2>
-            <p className="text-sm text-gray-500">
-              Created on {new Date(board.createdAt).toLocaleDateString()}
-            </p>
-          </div>
-        ))}
+        {boards.length === 0 ? (
+          <p>No boards found. Create your first board above!</p>
+        ) : (
+          boards.map((board) => (
+            <div
+              key={board._id}
+              className="bg-white p-4 rounded-xl shadow cursor-pointer hover:bg-blue-50"
+              onClick={() => navigate(`/board/${board._id}`)}
+            >
+              <h2 className="text-lg font-semibold">{board.title}</h2>
+              <p className="text-sm text-gray-500">
+                Created on {new Date(board.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

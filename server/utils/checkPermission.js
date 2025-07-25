@@ -1,8 +1,11 @@
+import Board from "../models/Board.js";
+
 export const checkBoardPermission = async (boardId, userId, allowedRoles = []) => {
-  const board = await Board.findById(boardId).populate("team.user");
+  
+  const board = await Board.findById(boardId).populate("team.userId");
 
   const currentUserRole = board.team.find((m) =>
-    m.user._id.equals(userId)
+    m.userId && m.userId._id.toString() === userId.toString()
   )?.role;
 
   if (!allowedRoles.includes(currentUserRole)) {

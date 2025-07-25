@@ -7,6 +7,11 @@ const taskSchema = new mongoose.Schema(
       ref: "List",
       required: true,
     },
+    boardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Board",
+      required: true,
+    },
     title: { type: String, required: true },
     description: { type: String },
     order: { type: Number, default: 0 },

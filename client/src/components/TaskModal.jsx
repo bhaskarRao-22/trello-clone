@@ -1,8 +1,19 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import {
+  ExclamationTriangleIcon,
+  PaperClipIcon,
+} from "@heroicons/react/24/outline";
 import API from "../api/axios";
 import socket from "../socket";
 
 function TaskModal({ task, onClose, onUpdate, token }) {
+  // const [open, setOpen] = useState(true);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description || "");
   const [comments, setComments] = useState([]);
@@ -83,6 +94,7 @@ function TaskModal({ task, onClose, onUpdate, token }) {
 
   useEffect(() => {
     fetchComments();
+    setCommentText("");
   }, [task._id]);
 
   useEffect(() => {
@@ -123,129 +135,342 @@ function TaskModal({ task, onClose, onUpdate, token }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-      <div className="bg-white rounded-xl p-6 w-[400px] relative shadow-lg">
-        <button
-          className="absolute top-2 right-3 text-gray-600 hover:text-black"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-        <h2 className="text-xl font-bold mb-4">Edit Task</h2>
+    // <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+    //   <div className="bg-white rounded-xl p-6 w-[400px] relative shadow-lg">
+    //     <button
+    //       className="absolute top-2 right-3 text-gray-600 hover:text-black"
+    //       onClick={onClose}
+    //     >
+    //       ✕
+    //     </button>
+    //     <h2 className="text-xl font-bold mb-4">Edit Task</h2>
 
-        <input
-          type="text"
-          className="w-full border rounded p-2 mb-3"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+    //     <input
+    //       type="text"
+    //       className="w-full border rounded p-2 mb-3"
+    //       value={title}
+    //       onChange={(e) => setTitle(e.target.value)}
+    //     />
 
-        <textarea
-          rows={5}
-          className="w-full border rounded p-2 mb-4"
-          placeholder="Description..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+    //     <textarea
+    //       rows={5}
+    //       className="w-full border rounded p-2 mb-4"
+    //       placeholder="Description..."
+    //       value={description}
+    //       onChange={(e) => setDescription(e.target.value)}
+    //     />
 
-        <div className="mb-4">
-          <label className="block font-medium mb-1">Label</label>
-          <select
-            value={label}
-            onChange={(e) => {
-              const selected = labelOptions.find(
-                (l) => l.value === e.target.value
-              );
-              setLabel(selected.value);
-              setLabelColor(selected.color);
-            }}
-            className="w-full border rounded p-2"
+    //     <div className="mb-4">
+    //       <label className="block font-medium mb-1">Label</label>
+    //       <select
+    //         value={label}
+    //         onChange={(e) => {
+    //           const selected = labelOptions.find(
+    //             (l) => l.value === e.target.value
+    //           );
+    //           setLabel(selected.value);
+    //           setLabelColor(selected.color);
+    //         }}
+    //         className="w-full border rounded p-2"
+    //       >
+    //         {labelOptions.map((opt) => (
+    //           <option key={opt.value} value={opt.value}>
+    //             {opt.label}
+    //           </option>
+    //         ))}
+    //       </select>
+    //     </div>
+
+    //     <div className="mb-4">
+    //       <label className="block font-medium mb-1">Due Date</label>
+    //       <input
+    //         type="date"
+    //         value={dueDate}
+    //         onChange={(e) => setDueDate(e.target.value)}
+    //         className="w-full border rounded p-2"
+    //       />
+    //     </div>
+
+    //     <button
+    //       onClick={handleUpdate}
+    //       className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    //     >
+    //       Save
+    //     </button>
+
+    //     <hr className="my-4" />
+
+    //     <h3 className="text-md font-semibold mb-2">Comments</h3>
+
+    //     <div className="space-y-3 max-h-60 overflow-y-auto mb-4 pr-2">
+    //       {comments.map((c) => (
+    //         <div key={c._id} className="border p-2 rounded">
+    //           <p className="text-sm">
+    //             <strong>{c.userId.name}</strong> •{" "}
+    //             <span className="text-gray-500 text-xs">
+    //               {new Date(c.createdAt).toLocaleString()}
+    //             </span>
+    //           </p>
+    //           <p className="text-sm mt-1">{c.text}</p>
+    //         </div>
+    //       ))}
+    //     </div>
+
+    //     <div className="flex gap-2">
+    //       <input
+    //         type="text"
+    //         value={commentText}
+    //         onChange={(e) => setCommentText(e.target.value)}
+    //         className="flex-1 border p-2 rounded"
+    //         placeholder="Write a comment..."
+    //       />
+    //       <button
+    //         onClick={addComment}
+    //         className="bg-blue-500 text-white px-3 rounded hover:bg-blue-600"
+    //       >
+    //         Send
+    //       </button>
+    //     </div>
+
+    //     <div className="mb-4">
+    //       <label className="block font-medium mb-1">Attachments</label>
+    //       <input
+    //         type="file"
+    //         onChange={handleFileUpload}
+    //         disabled={uploading}
+    //         className="text-sm mb-2"
+    //       />
+    //       {uploading && <p className="text-sm text-gray-500">Uploading...</p>}
+    //       <ul className="text-sm space-y-1 max-h-32 overflow-y-auto">
+    //         {task.attachments?.map((att, i) => (
+    //           <li key={i}>
+    //             📎{" "}
+    //             <a
+    //               href={att.url}
+    //               target="_blank"
+    //               rel="noopener noreferrer"
+    //               className="underline text-blue-600"
+    //             >
+    //               {att.filename}
+    //             </a>
+    //           </li>
+    //         ))}
+    //       </ul>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <Dialog open={true} onClose={onClose} className="relative z-10">
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
+      />
+
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <DialogPanel
+            transition
+            className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-xl xl:max-w-xl data-closed:sm:translate-y-0 data-closed:sm:scale-95 max-h-[80vh] overflow-y-auto"
           >
-            {labelOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div className="sm:flex sm:items-start">
+                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                  <div className="sticky top-0 z-10 bg-white px-4 pt-4 pb-2 shadow-[0_2px_4px_-1px_rgba(0,0,0,0.1)]">
+                    <div className="flex justify-between items-center">
+                      <DialogTitle
+                        as="h3"
+                        className="text-base font-semibold text-gray-900"
+                      >
+                        📝 Edit Task
+                      </DialogTitle>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: labelColor }}
+                        ></span>
+                        <span className="text-sm">{label}</span>
+                      </div>
+                      <button
+                        onClick={onClose}
+                        className="text-gray-500 hover:text-black text-xl px-2"
+                        aria-label="Close modal"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-2">
+                    {/* Task Title */}
+                    <input
+                      type="text"
+                      className="w-full mb-3 border border-gray-300 rounded p-2 text-sm"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+
+                    {/* Description */}
+                    <textarea
+                      className="w-full mb-3 border border-gray-300 rounded p-2 text-sm"
+                      rows={4}
+                      placeholder="Description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+
+                    {/* Label */}
+                    <div className="mb-3">
+                      <label className="text-sm font-medium block mb-1">
+                        Label
+                      </label>
+                      <select
+                        className="w-full border border-gray-300 rounded p-2 text-sm"
+                        value={label}
+                        onChange={(e) => {
+                          const selected = labelOptions.find(
+                            (l) => l.value === e.target.value
+                          );
+                          setLabel(selected.value);
+                          setLabelColor(selected.color);
+                        }}
+                      >
+                        {labelOptions.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Due Date */}
+                    <div className="mb-4">
+                      <label className="text-sm font-medium block mb-1">
+                        Due Date
+                      </label>
+                      <input
+                        type="date"
+                        value={dueDate}
+                        onChange={(e) => setDueDate(e.target.value)}
+                        className="w-full border border-gray-300 rounded p-2 text-sm"
+                      />
+                    </div>
+
+                    {/* Comments */}
+                    <div className="mb-4">
+                      <label className="text-sm font-semibold block mb-2">
+                        Comments
+                      </label>
+                      <div className="max-h-40 overflow-y-auto space-y-2">
+                        {comments.map((c) => (
+                          <div
+                            key={c._id}
+                            className="text-sm border rounded p-2"
+                          >
+                            <strong>{c.userId.name}</strong>{" "}
+                            <span className="text-gray-500 text-xs">
+                              {new Date(c.createdAt).toLocaleString()}
+                            </span>
+                            <p className="mt-1">{c.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex mt-2 gap-2">
+                        <input
+                          type="text"
+                          value={commentText}
+                          onChange={(e) => setCommentText(e.target.value)}
+                          className="flex-1 border border-gray-300 rounded p-2 text-sm"
+                          placeholder="Write a comment..."
+                        />
+                        <button
+                          onClick={addComment}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Attachments */}
+                    <div className="mb-4">
+                      <label className="text-sm font-semibold block mb-1">
+                        Attachments
+                      </label>
+                      <input
+                        type="file"
+                        onChange={handleFileUpload}
+                        className="text-sm mb-2"
+                        disabled={uploading}
+                      />
+                      {uploading && (
+                        <p className="text-gray-500 text-sm">Uploading...</p>
+                      )}
+                      <ul className="space-y-1 text-sm max-h-32 overflow-y-auto mt-1 text-sm">
+                        {task.attachments?.map((att, i) => (
+                          <li key={i}>
+                            <PaperClipIcon className="inline h-4 w-4 text-gray-500 mr-1" />
+                            <a
+                              href={att.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline text-blue-600"
+                            >
+                              {att.filename}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex justify-end gap-2 mt-6">
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleUpdate}
+                        className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                        disabled={uploading}
+                      >
+                        Save Changes
+                      </button>
+                      {uploading && (
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <svg
+                            className="animate-spin h-4 w-4"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8z"
+                            ></path>
+                          </svg>
+                          Uploading...
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </DialogPanel>
         </div>
-
-        <div className="mb-4">
-          <label className="block font-medium mb-1">Due Date</label>
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="w-full border rounded p-2"
-          />
-        </div>
-
-        <button
-          onClick={handleUpdate}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Save
-        </button>
       </div>
-
-      <hr className="my-4" />
-      <h3 className="text-md font-semibold mb-2">Comments</h3>
-
-      <div className="space-y-3 max-h-60 overflow-y-auto mb-4 pr-2">
-        {comments.map((c) => (
-          <div key={c._id} className="border p-2 rounded">
-            <p className="text-sm">
-              <strong>{c.userId.name}</strong> •{" "}
-              <span className="text-gray-500 text-xs">
-                {new Date(c.createdAt).toLocaleString()}
-              </span>
-            </p>
-            <p className="text-sm mt-1">{c.text}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-          className="flex-1 border p-2 rounded"
-          placeholder="Write a comment..."
-        />
-        <button
-          onClick={addComment}
-          className="bg-blue-500 text-white px-3 rounded hover:bg-blue-600"
-        >
-          Send
-        </button>
-      </div>
-
-      <div className="mb-4">
-        <label className="block font-medium mb-1">Attachments</label>
-        <input
-          type="file"
-          onChange={handleFileUpload}
-          disabled={uploading}
-          className="text-sm mb-2"
-        />
-        {uploading && <p className="text-sm text-gray-500">Uploading...</p>}
-        <ul className="text-sm space-y-1 max-h-32 overflow-y-auto">
-          {task.attachments?.map((att, i) => (
-            <li key={i}>
-              📎{" "}
-              <a
-                href={att.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-blue-600"
-              >
-                {att.filename}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    </Dialog>
   );
 }
 

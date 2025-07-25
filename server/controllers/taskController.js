@@ -6,13 +6,13 @@ import { logActivity } from "../utils/logActivity.js";
 
 export const createTask = async (req, res) => {
   try {
-    const { title, listId } = req.body;
+    const { title, listId, boardId } = req.body;
 
     // const list = await List.findById(listId);
     // const boardId = list.boardId;
     // await checkBoardPermission(boardId, req.user.id, ["Admin", "Editor"]);
 
-    const task = await Task.create({ title, listId });
+    const task = await Task.create({ title, listId, boardId });
     res.status(201).json(task);
   } catch (err) {
     res.status(500).json({ msg: "Task creation failed", err });
@@ -51,11 +51,11 @@ export const updateTaskOrder = async (req, res) => {
 export const updateTask = async (req, res) => {
   try {
     const { taskId } = req.params;
-    const { title, description } = req.body;
+    const { title, description, label, labelColor, dueDate } = req.body;
 
     const task = await Task.findByIdAndUpdate(
       taskId,
-      { title, description },
+      { title, description, label, labelColor, dueDate },
       { new: true }
     );
 
@@ -65,10 +65,12 @@ export const updateTask = async (req, res) => {
       action: "Updated Task",
       taskId: task._id,
       meta: { fields: Object.keys(req.body) },
+      io: req.io,
     });
 
     res.json(task);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "Task update failed", err });
   }
 };

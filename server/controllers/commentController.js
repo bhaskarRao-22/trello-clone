@@ -19,6 +19,7 @@ export const createComment = async (req, res) => {
       action: "Commented",
       taskId,
       meta: { commentText: text },
+      io: req.io,
     });
 
     // Emit event to all users on that board

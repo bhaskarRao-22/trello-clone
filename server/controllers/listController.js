@@ -4,9 +4,9 @@ import { checkBoardPermission } from "../utils/checkPermission.js";
 export const createList = async (req, res) => {
   try {
     const { title, boardId } = req.body;
-
+    
     await checkBoardPermission(boardId, req.user.id, ["Admin", "Editor"]);
-
+    
     const list = await List.create({ title, boardId });
     res.status(201).json(list);
   } catch (err) {

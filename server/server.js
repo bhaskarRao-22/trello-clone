@@ -8,6 +8,7 @@ import listRoutes from "./routes/listRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import activityRoutes from "./routes/activityRoutes.js";
+import inviteRoutes from "./routes/inviteRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
 
@@ -36,6 +37,7 @@ app.use("/api/lists", listRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/activities", activityRoutes);
+app.use("/api/invites", inviteRoutes);
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);

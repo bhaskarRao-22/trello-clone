@@ -5,13 +5,14 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import BoardPage from "./pages/BoardPage";
+import JoinInvite from "./pages/JoinInvite";
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route
           path="/dashboard"
@@ -21,6 +22,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/board/:id" element={<BoardPage />} />
+        <Route path="/join-invite/:token" element={<JoinInvite />} />
       </Routes>
     </BrowserRouter>
   );
