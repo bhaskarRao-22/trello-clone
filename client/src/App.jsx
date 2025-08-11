@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BoardPage from "./pages/BoardPage";
 import JoinInvite from "./pages/JoinInvite";
+import MonthlyAttendance from "./pages/MonthlyAttendance";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         />
         <Route path="/board/:id" element={<BoardPage />} />
         <Route path="/join-invite/:token" element={<JoinInvite />} />
+        <Route path="/attendance/summary" element={<MonthlyAttendance />} />
       </Routes>
     </BrowserRouter>
   );

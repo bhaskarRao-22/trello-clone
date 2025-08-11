@@ -36,9 +36,9 @@ function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="bg-white shadow-md fixed w-full top-0 left-0 z-50"
+      className="bg-white shadow-md fixed w-full top-0 left-0 z-50 sm:ml-64 sm:w-[calc(100%-16rem)]"
     >
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-9xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}
@@ -103,9 +103,9 @@ function Navbar() {
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                   className="size-8 rounded-full"
                 />
-              <span className="text-gray-700 font-medium content-center">
-                {user.name || "User"}
-              </span>
+                <span className="text-gray-700 font-medium content-center">
+                  {user.name || "User"}
+                </span>
               </MenuButton>
               <MenuItems
                 transition
